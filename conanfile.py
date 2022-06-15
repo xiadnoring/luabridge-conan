@@ -3,7 +3,7 @@ from conans import ConanFile, CMake, tools
 
 class LuabridgeConan(ConanFile):
     name = "luabridge"
-    version = "2.4.1"
+    version = "2.6"
     license = "MIT"
     author = "konrad"
     url = "https://github.com/KonradNoTantoo/luabridge_conan"
@@ -20,7 +20,7 @@ class LuabridgeConan(ConanFile):
 
     def build_requirements(self):
         if self.options.unit_tests:
-            self.build_requires("gtest/1.8.1")
+            self.build_requires("gtest/1.11.0")
 
 
     def source(self):
