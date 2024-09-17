@@ -1,0 +1,42 @@
+{
+    "version": 3,
+    "vendor": {
+        "conan": {}
+    },
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 15,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "conan-gcc-14-x86_64-gnu17-release",
+            "displayName": "'conan-gcc-14-x86_64-gnu17-release' config",
+            "description": "'conan-gcc-14-x86_64-gnu17-release' configure using 'Unix Makefiles' generator",
+            "generator": "Unix Makefiles",
+            "cacheVariables": {
+                "CMAKE_POLICY_DEFAULT_CMP0091": "NEW",
+                "CMAKE_BUILD_TYPE": "Release"
+            },
+            "toolchainFile": "generators/conan_toolchain.cmake",
+            "binaryDir": "/home/Timur/luabridge_conan/test_package/build/gcc-14-x86_64-gnu17-release"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "conan-gcc-14-x86_64-gnu17-release",
+            "configurePreset": "conan-gcc-14-x86_64-gnu17-release",
+            "jobs": 16
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "conan-gcc-14-x86_64-gnu17-release",
+            "configurePreset": "conan-gcc-14-x86_64-gnu17-release",
+            "environment": {
+                "LD_LIBRARY_PATH": "/home/Timur/.conan2/p/b/lua89182da1bdee3/p/lib:$penv{LD_LIBRARY_PATH}",
+                "DYLD_LIBRARY_PATH": "/home/Timur/.conan2/p/b/lua89182da1bdee3/p/lib:$penv{DYLD_LIBRARY_PATH}"
+            }
+        }
+    ]
+}

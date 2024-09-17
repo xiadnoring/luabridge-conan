@@ -15,13 +15,14 @@ class LuabridgeConan(ConanFile):
     version = "2.8"
     license = "MIT"
     author = "xiadnoring, konrad"
-    url = "https://github.com/xiadnoring/luabridge-conan"
+    url = "https://github.com/conan-io/conan-center-index"
+    home = "https://github.com/xiadnoring/luabridge-conan"
     description = "LuaBridge is a lightweight and dependency-free library for mapping data, functions, and classes back and forth between C++ and Lua."
     topics = ("lua", "binding", "conan")
     settings = "os", "compiler", "arch", "build_type"
     no_copy_source = True
     options = {}
-    default_options = {}
+    default_options = {"lua*:shared": True}
 
     def source(self):
         get(self, url="https://github.com/vinniefalco/LuaBridge/archive/{}.tar.gz".format(self.version), strip_root=True)
@@ -36,7 +37,7 @@ class LuabridgeConan(ConanFile):
         self.cpp_info.libdirs = []
 
     def requirements(self):
-        self.requires("lua/[>5.0.0]")
+        self.requires("lua/[>5.0.0]", )
 
     def package_id(self):
         self.info.clear()
