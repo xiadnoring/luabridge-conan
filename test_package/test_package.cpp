@@ -1,12 +1,7 @@
 #include <string>
 #include <iostream>
 
-extern "C"
-{
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
-}
+#include "lua.hpp"
 
 #include <LuaBridge/LuaBridge.h>
 
@@ -19,7 +14,7 @@ std::string global_string;
 class Class
 {
 public:
-	Class(std::string name) : _name(name) {} 
+	Class(std::string name) : _name(name) {}
 
 	std::string name() const { return _name; }
 	void name(std::string name) { _name = name; }
@@ -34,7 +29,7 @@ private:
 
 int main()
 {
-	lua_State * const L = lua_open();
+	lua_State * const L = luaL_newstate();
 	luaL_openlibs(L);
 
     luabridge::getGlobalNamespace(L)

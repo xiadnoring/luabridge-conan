@@ -1,58 +1,45 @@
-from conans import ConanFile, CMake, tools
+from conan import ConanFile, tools
+from conan.tools.cmake import CMakeToolchain, CMake, cmake_layout, CMakeDeps
+from conan.tools.files import files, get, copy, replace_in_file, collect_libs, rmdir, rm, apply_conandata_patches, export_conandata_patches
+from conan.errors import ConanInvalidConfiguration
+from conan.tools.apple import fix_apple_shared_install_name
+from conan.tools.scm import Version
+from conan.tools.build import check_min_cppstd
+from conan.tools.microsoft import check_min_vs, is_msvc, is_msvc_static_runtime
+import os
 
+required_conan_version = ">=1.53.0"
 
 class LuabridgeConan(ConanFile):
     name = "luabridge"
-    version = "2.6"
+    version = "2.8"
     license = "MIT"
-    author = "konrad"
-    url = "https://github.com/KonradNoTantoo/luabridge_conan"
+    author = "xiadnoring, konrad"
+    url = "https://github.com/xiadnoring/luabridge-conan"
     description = "LuaBridge is a lightweight and dependency-free library for mapping data, functions, and classes back and forth between C++ and Lua."
     topics = ("lua", "binding", "conan")
     settings = "os", "compiler", "arch", "build_type"
-    options = {"unit_tests": [True, False]}
-    default_options = {"unit_tests": False}
-    generators = "cmake"
     no_copy_source = True
-    requires = "lua/5.1.5@utopia/testing"
-    folder_name = "LuaBridge-{}".format(version)
-
-
-    def build_requirements(self):
-        if self.options.unit_tests:
-            self.build_requires("gtest/1.11.0")
-
+    options = {}
+    default_options = {}
 
     def source(self):
-        tools.get("https://github.com/vinniefalco/LuaBridge/archive/{}.tar.gz".format(self.version))
-        if self.options.unit_tests:
-            tools.replace_in_file("{}/CMakeLists.txt".format(self.folder_name),
-                                  "project (LuaBridge)",
-                                  '''project (LuaBridge)
-include (${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup ()
-enable_testing ()''')
-            tools.replace_in_file("{}/CMakeLists.txt".format(self.folder_name),
-                                  "add_subdirectory (third_party/gtest)",
-                                  "# add_subdirectory (third_party/gtest)")
+        get(self, url="https://github.com/vinniefalco/LuaBridge/archive/{}.tar.gz".format(self.version), strip_root=True)
 
-            tools.replace_in_file("{}/Tests/CMakeLists.txt".format(self.folder_name),
-                                  "add_executable (${LUABRIDGE_TEST_NAME}",
-                                  '''add_test (NAME Run${LUABRIDGE_TEST_NAME} COMMAND ${LUABRIDGE_TEST_NAME})
-  add_executable (${LUABRIDGE_TEST_NAME}''')
+    def package_info(self):
+        self.cpp_info.set_property("cmake_find_mode", "both")
+        self.cpp_info.set_property("cmake_file_name", "luabridge")
+        self.cpp_info.set_property("cmake_target_name", "luabridge::luabridge")
+        self.cpp_info.set_property("pkg_config_name", "luabridge")
 
+        self.cpp_info.bindirs = []
+        self.cpp_info.libdirs = []
 
-    def build(self): # this is not building a library, just tests
-        if self.options.unit_tests:
-            cmake = CMake(self)
-            cmake.configure(source_folder=self.folder_name)
-            cmake.build()
-            cmake.test()
-
-
-    def package(self):
-        self.copy("*.h", dst="include", src="{}/Source".format(self.folder_name), keep_path=True)
-
+    def requirements(self):
+        self.requires("lua/[>5.0.0]")
 
     def package_id(self):
-        self.info.header_only()
+        self.info.clear()
+
+    def package(self):
+        copy(self, "*.h", os.path.join(self.source_folder, "Source"), os.path.join(self.package_folder, "include"), keep_path=True)
