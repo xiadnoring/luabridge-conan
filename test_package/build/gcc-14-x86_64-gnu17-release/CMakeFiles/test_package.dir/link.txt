@@ -1,1 +1,0 @@
-/usr/bin/c++ -m64 -O3 -DNDEBUG -m64 CMakeFiles/test_package.dir/test_package.cpp.o -o test_package   -L/home/Timur/.conan2/p/b/lua89182da1bdee3/p/lib  -Wl,-rpath,/home/Timur/.conan2/p/b/lua89182da1bdee3/p/lib /home/Timur/.conan2/p/b/lua89182da1bdee3/p/lib/liblua.so -ldl -lm
