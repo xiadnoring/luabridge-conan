@@ -12,7 +12,7 @@ required_conan_version = ">=1.53.0"
 
 class LuabridgeConan(ConanFile):
     name = "luabridge"
-    version = "2.8"
+    version = "3.0"
     license = "MIT"
     author = "xiadnoring, konrad"
     url = "https://github.com/conan-io/conan-center-index"
@@ -25,7 +25,11 @@ class LuabridgeConan(ConanFile):
     default_options = {"lua*:shared": True}
 
     def source(self):
-        get(self, url="https://github.com/vinniefalco/LuaBridge/archive/{}.tar.gz".format(self.version), strip_root=True)
+        if Version (self.version) < Version ("3.0"):
+            get(self, url="https://github.com/vinniefalco/LuaBridge/archive/{}.tar.gz".format(self.version), strip_root=True)
+        else:
+            get(self, url="https://github.com/kunitoki/LuaBridge3/archive/refs/tags/3.0-rc4.tar.gz".format(self.version), strip_root=True)
+
 
     def package_info(self):
         self.cpp_info.set_property("cmake_find_mode", "both")
